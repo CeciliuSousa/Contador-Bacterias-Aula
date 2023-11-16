@@ -21,11 +21,21 @@ for arquivo in os.listdir(diretorio_imagens):
         imagem_colorida = cv2.imread(imagem_path)
         imagem_colorida = cv2.resize(imagem_colorida, (300, 300))
 
-        # Aplicar suavização para reduzir ruído
+        # APLICANDO SUAVIZAÇÃO PARA REDUZIR OS RUIDOS NA IMAGEM
+
+        # Aplica um desfoque gaussiano para reduzir o ruído na imagem
         img = cv2.GaussianBlur(gray, (5, 5), 3)
+
+        # Detecta bordas na imagem usando o operador de Canny com limiar inferior e limiar superior:
         img = cv2.Canny(img, 40, 120)
+
+        # Cria um kernel de convolução 1x1 preenchido com uns para dilatação e erosão
         kernel = np.ones((1, 1), np.uint8)
+
+        # Aumenta a região de borda na imagem para preencher lacunas
         img = cv2.dilate(img, kernel, iterations=2)
+
+        # Diminui a região de borda na imagem
         img = cv2.erode(img, kernel, iterations=2)
 
         # Encontrar os contornos
